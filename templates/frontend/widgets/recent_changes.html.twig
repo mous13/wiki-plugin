@@ -1,0 +1,13 @@
+{% if widget.wiki is defined %}
+    <div class="box">
+        <h3><a href="{{ path('wiki_special_recent', { slug: widget.wiki.slug }) }}">{{ 'wiki.nav.recent'|trans }}</a></h3>
+        {% for revision in widget.revisions %}
+            <div class="pb-2 pt-2{% if not loop.last %} border-b{% endif %}">
+                <a class="text-bold" href="{{ path('wiki_page', { slug: widget.wiki.slug, page: revision.page.slug }) }}">{{ revision.page.title }}</a>
+                <p class="text-small text-secondary mb-0">{{ revision.createdAt|format_date }}</p>
+            </div>
+        {% else %}
+            <p class="text-secondary mb-0">{{ 'wiki.special.empty'|trans }}</p>
+        {% endfor %}
+    </div>
+{% endif %}

@@ -1,0 +1,7 @@
+{% if widget.page is defined and widget.page is not null %}
+    <link rel="stylesheet" href="{{ asset('bundles/citadelwikiplugin/wiki.css') }}?v={{ wiki_css_version() }}">
+    <article class="box rich-text wiki-article">
+        <h2>{{ widget.page.title }}</h2>
+        {{ widget.html|raw }}
+    </article>
+{% endif %}
