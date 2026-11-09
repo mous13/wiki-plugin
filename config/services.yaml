@@ -1,0 +1,16 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Citadel\Wiki\:
+        resource: '../src/'
+        exclude:
+            - '../src/Entity/'
+            - '../src/Exception/'
+            - '../src/Form/DTO/'
+            - '../src/Markdown/InfoboxRenderer.php'
+            - '../src/Markdown/RenderedMarkdown.php'
+            - '../src/Markdown/WikiLinkNode.php'
+            - '../src/Markdown/WikiLinkParser.php'
+            - '../src/Markdown/WikiLinkRenderer.php'
