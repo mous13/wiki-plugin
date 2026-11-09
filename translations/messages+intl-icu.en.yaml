@@ -1,0 +1,133 @@
+wiki:
+    index:
+        title: 'Wikis'
+        none: 'There are no wikis to show right now.'
+    nav:
+        home: 'Main page'
+        recent: 'Recent changes'
+        all: 'All pages'
+        wanted: 'Wanted pages'
+        protected: 'Protected pages'
+        browse: 'Browse this wiki'
+    tabs:
+        read: 'Read'
+        edit: 'Edit'
+        history: 'History'
+    page:
+        contents: 'Contents'
+        categories: 'Categories:'
+        category_members: 'Pages in this category'
+        subcategories: 'Subcategories'
+        last_edited: 'Last edited {date} by'
+        revisions: '{count, plural, one {# revision} other {# revisions}}'
+        missing: 'This page does not exist yet.'
+        create: 'Create this page'
+        saved: 'Page saved.'
+        restored: 'Revision restored.'
+        protected: 'Page protected.'
+        unprotected: 'Page unprotected.'
+        deleted: 'Page deleted.'
+        created_concurrently: 'Someone else created this page while you were writing. Your text was not saved.'
+        protected_hint: 'Only moderators can edit this page'
+        protect: 'Protect'
+        unprotect: 'Unprotect'
+        delete: 'Delete'
+        delete_confirm: 'Delete this page and its entire history? This cannot be undone.'
+    create:
+        button: 'Create page'
+        heading: 'Create a page'
+        title: 'Page title'
+        help: 'To make a category, start the title with Category: (for example Category:Weapons).'
+        submit: 'Continue'
+        invalid: 'Enter a title containing at least one letter or number.'
+        exists: 'A page with that title already exists.'
+    edit:
+        title: 'Editing {title}'
+        page_title: 'Title'
+        parent: 'Parent page'
+        parent_placeholder: 'Optional page name'
+        content: 'Page content'
+        toolbar: 'Formatting'
+        preview: 'Preview'
+        summary: 'Edit summary'
+        minor: 'Minor edit'
+        save: 'Save page'
+        base: 'Editing from revision #{id}'
+        new_page: 'New page'
+        contents_here: 'The contents box will appear here.'
+        unknown_tags: 'These resources or snippets could not be found: {tags}'
+        missing_links: 'These links point to pages that do not exist yet: {links}'
+        conflict: 'Someone else changed this page while you were editing. Their changes are shown below. Your text is still in the editor; review it and save again to replace their version.'
+        infobox:
+            heading: 'Infobox'
+            title: 'Title'
+            image: 'Image'
+            image_placeholder: 'Image address, or upload one'
+            upload: 'Upload'
+            rows: 'Details'
+            label: 'Label'
+            value: 'Value'
+            add_row: 'Add a row'
+            remove: 'Remove this row'
+            cancel: 'Cancel'
+            save: 'Save infobox'
+        tool:
+            bold: 'Bold'
+            italic: 'Italic'
+            heading: 'Heading'
+            wiki_link: 'Wiki link'
+            infobox: 'Infobox'
+            contents: 'Place the contents box here'
+            image: 'Upload image'
+        error:
+            content_too_long: 'Page content cannot be larger than {max} bytes.'
+            parent_missing: 'The parent page does not exist.'
+            parent_cycle: 'A page cannot be placed underneath itself.'
+    history:
+        title: 'History of {title}'
+        compare: 'Compare'
+        compare_from: 'Compare from this revision'
+        compare_to: 'Compare to this revision'
+        compare_selected: 'Compare selected revisions'
+        date: 'Date'
+        author: 'Author'
+        size: 'Size'
+        summary: 'Summary'
+        current: 'Current'
+        restore: 'Restore'
+        unknown_author: 'Deleted user'
+    diff:
+        title: 'Changes to {title}'
+        comparing: 'Comparing revision #{from} ({fromDate}) with #{to} ({toDate})'
+        none: 'These revisions are identical.'
+    pager:
+        newer: 'Previous'
+        older: 'Next'
+    search:
+        title: 'Search'
+        placeholder: 'Search this wiki'
+        prompt: 'Enter at least two characters to search.'
+        none: 'No pages matched your search.'
+    special:
+        empty: 'Nothing here yet.'
+        link_count: '{count, plural, one {# link} other {# links}}'
+    widget:
+        embed_page_help: 'The name of the page to embed.'
+    admin:
+        permissions: 'Permissions'
+        wiki:
+            crud:
+                single: 'wiki'
+                plural: 'wikis'
+        table:
+            title: 'Title'
+            slug: 'Slug'
+        form:
+            title: 'Title'
+            description: 'Description'
+admin:
+    cms:
+        widget:
+            wiki:
+                recent_changes: 'Recent wiki changes'
+                embed_page: 'Embed wiki page'

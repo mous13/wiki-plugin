@@ -1,0 +1,15 @@
+{% macro accordion(wiki, node, nested = false) %}
+    <details{% if node.open %} open{% endif %}>
+        <summary class="wiki-summary p-1{% if nested %} text-small{% endif %}"><a{% if node.active %} class="text-bold" aria-current="page"{% endif %} href="{{ path('wiki_page', { slug: wiki.slug, page: node.slug }) }}">{{ node.label }}</a>{% include '@CitadelWikiPlugin/frontend/_toggle_icon.html.twig' %}</summary>
+        {% for child in node.children %}
+            {{ _self.accordion(wiki, child, true) }}
+        {% endfor %}
+        {% if node.pages is not empty %}
+            <ul class="wiki-accordion-pages">
+                {% for item in node.pages %}
+                    <li><a class="d-block p-1 text-small{% if item.active %} text-bold{% endif %}"{% if item.active %} aria-current="page"{% endif %} href="{{ path('wiki_page', { slug: wiki.slug, page: item.slug }) }}">{{ item.title }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </details>
+{% endmacro %}

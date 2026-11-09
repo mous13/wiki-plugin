@@ -1,0 +1,50 @@
+{% extends '@CitadelWikiPlugin/frontend/layout.html.twig' %}
+{% block title_page %}{{ 'wiki.history.title'|trans({ title: title }) }}{% endblock %}
+{% block wiki_content %}
+    {% include '@CitadelWikiPlugin/frontend/_tabs.html.twig' with { active: 'history' } %}
+    <form method="get" action="{{ path('wiki_page_history', { slug: wiki.slug, page: slug }) }}">
+        <div class="card">
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>{{ 'wiki.history.compare'|trans }}</th>
+                            <th>{{ 'wiki.history.date'|trans }}</th>
+                            <th>{{ 'wiki.history.author'|trans }}</th>
+                            <th>{{ 'wiki.history.size'|trans }}</th>
+                            <th>{{ 'wiki.history.summary'|trans }}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for revision in pager.rows %}
+                            {% set isCurrent = page.currentRevision and page.currentRevision.id == revision.id %}
+                            <tr>
+                                <td>
+                                    <input type="radio" name="a" value="{{ revision.id }}" aria-label="{{ 'wiki.history.compare_from'|trans }}">
+                                    <input type="radio" name="b" value="{{ revision.id }}" aria-label="{{ 'wiki.history.compare_to'|trans }}">
+                                </td>
+                                <td>{{ revision.createdAt|format_date }}</td>
+                                <td>{% if revision.author %}{% include '@Forumify/components/username.html.twig' with { user: revision.author } only %}{% else %}<span class="text-secondary">{{ 'wiki.history.unknown_author'|trans }}</span>{% endif %}</td>
+                                <td class="{{ revision.sizeDelta >= 0 ? 'wiki-size-up' : 'wiki-size-down' }}">{{ revision.sizeDelta >= 0 ? '+' }}{{ revision.sizeDelta }}</td>
+                                <td>
+                                    {% if revision.minor %}<span class="tag text-small" title="{{ 'wiki.edit.minor'|trans }}">m</span>{% endif %}
+                                    {{ revision.summary }}
+                                </td>
+                                <td class="text-right">
+                                    {% if isCurrent %}
+                                        <span class="text-small text-secondary">{{ 'wiki.history.current'|trans }}</span>
+                                    {% elseif canEdit %}
+                                        <button class="btn-link btn-small" formmethod="post" formaction="{{ path('wiki_page_restore', { slug: wiki.slug, page: slug, revision: revision.id }) }}" name="_token" value="{{ csrf_token('wiki-restore') }}"><i class="ph ph-arrow-counter-clockwise"></i>{{ 'wiki.history.restore'|trans }}</button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <button class="btn-outlined mt-4"><i class="ph ph-git-diff"></i>{{ 'wiki.history.compare_selected'|trans }}</button>
+    </form>
+    {% include '@CitadelWikiPlugin/frontend/_pager.html.twig' %}
+{% endblock %}

@@ -1,0 +1,21 @@
+{
+    "name": "@citadel/wiki-plugin",
+    "description": "Frontend assets for the wiki plugin",
+    "version": "0.1.0",
+    "symfony": {
+        "controllers": {
+            "editor": {
+                "main": "dist/editor_controller.js",
+                "fetch": "lazy",
+                "enabled": true,
+                "autoimport": {}
+            }
+        },
+        "importmap": {
+            "@hotwired/stimulus": "^3.0.0"
+        }
+    },
+    "peerDependencies": {
+        "@hotwired/stimulus": "^3.0.0"
+    }
+}

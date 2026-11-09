@@ -1,0 +1,12 @@
+{% extends '@CitadelWikiPlugin/frontend/layout.html.twig' %}
+{% block title_page %}{{ title }} - {{ wiki.title }}{% endblock %}
+{% block wiki_content %}
+    {% include '@CitadelWikiPlugin/frontend/_tabs.html.twig' with { active: 'read' } %}
+    <div class="box">
+        <p>{{ 'wiki.page.missing'|trans }}</p>
+        {% if canEdit %}
+            <a class="btn-primary" href="{{ path('wiki_page_edit', { slug: wiki.slug, page: slug }) }}"><i class="ph ph-plus"></i>{{ 'wiki.page.create'|trans }}</a>
+        {% endif %}
+    </div>
+    {% include '@CitadelWikiPlugin/frontend/_members.html.twig' %}
+{% endblock %}

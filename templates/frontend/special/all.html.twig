@@ -1,0 +1,18 @@
+{% extends '@CitadelWikiPlugin/frontend/layout.html.twig' %}
+{% set heading = (protectedOnly ? 'wiki.nav.protected' : 'wiki.nav.all')|trans %}
+{% block title_page %}{{ heading }} - {{ wiki.title }}{% endblock %}
+{% block wiki_content %}
+    <h1>{{ heading }}</h1>
+    <div class="box">
+        {% if pager.rows is empty %}
+            <p class="text-secondary mb-0">{{ 'wiki.special.empty'|trans }}</p>
+        {% else %}
+            <ul class="mb-0">
+                {% for page in pager.rows %}
+                    <li>{% if page.protected %}<i class="ph ph-lock"></i> {% endif %}<a href="{{ path('wiki_page', { slug: wiki.slug, page: page.slug }) }}">{{ page.title }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+    {% include '@CitadelWikiPlugin/frontend/_pager.html.twig' %}
+{% endblock %}

@@ -1,0 +1,22 @@
+{% import '@CitadelWikiPlugin/frontend/_macros.html.twig' as wikiui %}
+<h3><a href="{{ path('wiki_home', { slug: wiki.slug }) }}">{{ wiki.title }}</a></h3>
+<form action="{{ path('wiki_special_search', { slug: wiki.slug }) }}" method="get" class="mb-2">
+    <input type="search" name="q" class="w-100" placeholder="{{ 'wiki.search.placeholder'|trans }}" aria-label="{{ 'wiki.search.placeholder'|trans }}" value="{{ query|default('') }}">
+</form>
+{% if app.user and wiki_can_edit(wiki) %}
+    <a class="btn-primary btn-small w-100 mb-2" href="{{ path('wiki_special_create', { slug: wiki.slug }) }}"><i class="ph ph-plus"></i>{{ 'wiki.create.button'|trans }}</a>
+{% endif %}
+<nav class="flex flex-col mb-2">
+    <a class="btn-link btn-small" href="{{ path('wiki_home', { slug: wiki.slug }) }}"><i class="ph ph-house"></i>{{ 'wiki.nav.home'|trans }}</a>
+    <a class="btn-link btn-small" href="{{ path('wiki_special_recent', { slug: wiki.slug }) }}"><i class="ph ph-clock-counter-clockwise"></i>{{ 'wiki.nav.recent'|trans }}</a>
+    <a class="btn-link btn-small" href="{{ path('wiki_special_all', { slug: wiki.slug }) }}"><i class="ph ph-list-bullets"></i>{{ 'wiki.nav.all'|trans }}</a>
+    <a class="btn-link btn-small" href="{{ path('wiki_special_wanted', { slug: wiki.slug }) }}"><i class="ph ph-link-break"></i>{{ 'wiki.nav.wanted'|trans }}</a>
+    <a class="btn-link btn-small" href="{{ path('wiki_special_protected', { slug: wiki.slug }) }}"><i class="ph ph-lock"></i>{{ 'wiki.nav.protected'|trans }}</a>
+</nav>
+{% if nav.tree is not empty %}
+    <div class="wiki-accordion border-t pt-2">
+        {% for node in nav.tree %}
+            {{ wikiui.accordion(wiki, node) }}
+        {% endfor %}
+    </div>
+{% endif %}

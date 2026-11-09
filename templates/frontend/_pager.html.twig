@@ -1,0 +1,10 @@
+{% if pager.page > 1 or pager.hasNext %}
+    <div class="flex justify-between mt-4">
+        {% if pager.page > 1 %}
+            <a class="btn-link" href="{{ path(app.current_route, app.current_route_parameters|merge({ p: pager.page - 1 })) }}"><i class="ph ph-arrow-left"></i>{{ 'wiki.pager.newer'|trans }}</a>
+        {% else %}<span></span>{% endif %}
+        {% if pager.hasNext %}
+            <a class="btn-link" href="{{ path(app.current_route, app.current_route_parameters|merge({ p: pager.page + 1 })) }}">{{ 'wiki.pager.older'|trans }}<i class="ph ph-arrow-right"></i></a>
+        {% endif %}
+    </div>
+{% endif %}

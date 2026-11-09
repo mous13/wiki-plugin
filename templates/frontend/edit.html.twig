@@ -1,0 +1,15 @@
+{% extends '@CitadelWikiPlugin/frontend/layout.html.twig' %}
+{% block title_page %}{{ 'wiki.edit.title'|trans({ title: title }) }}{% endblock %}
+{% block body %}
+    {% include '@CitadelWikiPlugin/frontend/_tabs.html.twig' with { active: 'edit' } %}
+    {% if conflictDiff is not null %}
+        <div class="alert-warning mb-2">{{ 'wiki.edit.conflict'|trans }}</div>
+        {% include '@CitadelWikiPlugin/frontend/_diff.html.twig' with { rows: conflictDiff } only %}
+    {% endif %}
+    {{ component('Wiki\\Editor', {
+        wiki: wiki,
+        slug: slug,
+        baseRevisionId: baseRevisionId,
+        form: form,
+    }) }}
+{% endblock %}

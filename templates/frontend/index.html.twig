@@ -1,0 +1,19 @@
+{% extends '@Forumify/frontend/base.html.twig' %}
+{% block title_page %}{{ 'wiki.index.title'|trans }}{% endblock %}
+{% block body %}
+    <h1>{{ 'wiki.index.title'|trans }}</h1>
+    {% if wikis is empty %}
+        <div class="box text-secondary">{{ 'wiki.index.none'|trans }}</div>
+    {% else %}
+        <div class="grid gap-4">
+            {% for wiki in wikis %}
+                <div class="col-xs-12 col-md-6 col-lg-4">
+                    <div class="card h-100">
+                        <div class="card-title"><a href="{{ path('wiki_home', { slug: wiki.slug }) }}">{{ wiki.title }}</a></div>
+                        {% if wiki.description %}<div class="card-body">{{ wiki.description }}</div>{% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

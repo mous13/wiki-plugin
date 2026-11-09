@@ -1,0 +1,8 @@
+<details class="card wiki-contents mb-4{% if entries|length > 12 %} wiki-contents-columns{% endif %}"{% if open %} open{% endif %}>
+    <summary class="wiki-summary card-title text-bold">{{ 'wiki.page.contents'|trans }}{% include '@CitadelWikiPlugin/frontend/_toggle_icon.html.twig' %}</summary>
+    <nav class="card-body" aria-label="{{ 'wiki.page.contents'|trans }}">
+        {% for entry in entries %}
+            <a class="d-block pl-{{ entry.depth * 4 }} pb-1" href="#{{ entry.id }}"><span class="text-secondary mr-2">{{ entry.number }}</span>{{ entry.text }}</a>
+        {% endfor %}
+    </nav>
+</details>

@@ -1,0 +1,17 @@
+{% extends '@CitadelWikiPlugin/frontend/layout.html.twig' %}
+{% block title_page %}{{ 'wiki.nav.wanted'|trans }} - {{ wiki.title }}{% endblock %}
+{% block wiki_content %}
+    <h1>{{ 'wiki.nav.wanted'|trans }}</h1>
+    <div class="box">
+        {% if pager.rows is empty %}
+            <p class="text-secondary mb-0">{{ 'wiki.special.empty'|trans }}</p>
+        {% else %}
+            <ul class="mb-0">
+                {% for row in pager.rows %}
+                    <li><a class="wiki-link-missing" href="{{ path('wiki_page_edit', { slug: wiki.slug, page: row.slug, title: row.title }) }}">{{ row.title }}</a> <span class="text-small text-secondary">{{ 'wiki.special.link_count'|trans({ count: row.links }) }}</span></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+    {% include '@CitadelWikiPlugin/frontend/_pager.html.twig' %}
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends '@CitadelWikiPlugin/frontend/layout.html.twig' %}
+{% block title_page %}{{ 'wiki.diff.title'|trans({ title: title }) }}{% endblock %}
+{% block wiki_content %}
+    {% include '@CitadelWikiPlugin/frontend/_tabs.html.twig' with { active: 'history' } %}
+    <p class="text-small text-secondary">{{ 'wiki.diff.comparing'|trans({ from: from.id, to: to.id, fromDate: from.createdAt|format_date, toDate: to.createdAt|format_date }) }}</p>
+    {% include '@CitadelWikiPlugin/frontend/_diff.html.twig' with { rows: rows } only %}
+{% endblock %}

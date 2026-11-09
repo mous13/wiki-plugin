@@ -1,0 +1,16 @@
+{% extends '@CitadelWikiPlugin/frontend/layout.html.twig' %}
+{% block title_page %}{{ 'wiki.search.title'|trans }} - {{ wiki.title }}{% endblock %}
+{% block wiki_content %}
+    <h1>{{ 'wiki.search.title'|trans }}</h1>
+    <div class="box">
+        {% if results is empty %}
+            <p class="text-secondary mb-0">{{ (query is empty ? 'wiki.search.prompt' : 'wiki.search.none')|trans }}</p>
+        {% endif %}
+        {% for result in results %}
+            <div class="pb-2 pt-2{% if not loop.last %} border-b{% endif %}">
+                <a class="text-bold" href="{{ path('wiki_page', { slug: wiki.slug, page: result.page.slug }) }}">{{ result.page.title }}</a>
+                <p class="text-small text-secondary mb-0">{{ result.snippet|u.truncate(200, '...', false) }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

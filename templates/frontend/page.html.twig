@@ -1,0 +1,63 @@
+{% extends '@CitadelWikiPlugin/frontend/layout.html.twig' %}
+{% block title_page %}{{ title }} - {{ wiki.title }}{% endblock %}
+{% block wiki_main_class %}{{ article.infobox ? 'col-lg-7' : 'col-lg-10' }}{% endblock %}
+{% block wiki_rail %}
+    {% if article.infobox %}
+        <aside class="col-lg-3 hide-phone hide-tablet">
+            <div class="wiki-infobox-slot">{{ article.infobox|raw }}</div>
+        </aside>
+    {% endif %}
+{% endblock %}
+{% block wiki_content %}
+    {% if breadcrumbs is not empty %}
+        <div class="breadcrumbs text-small">
+            {% for crumb in breadcrumbs %}
+                <a href="{{ path('wiki_page', { slug: wiki.slug, page: crumb.slug }) }}">{{ wiki_display_title(crumb.title) }}</a> &gt;
+            {% endfor %}
+            <span class="text-secondary">{{ title }}</span>
+        </div>
+    {% endif %}
+    {% include '@CitadelWikiPlugin/frontend/_tabs.html.twig' with { active: 'read' } %}
+    <article class="box rich-text wiki-article">
+        {% if article.infobox %}<div class="wiki-infobox-slot hide-desktop mb-4">{{ article.infobox|raw }}</div>{% endif %}
+        {{ article.lead|raw }}
+        {% if article.showContents %}
+            <div class="hide-phone hide-tablet">{% include '@CitadelWikiPlugin/frontend/_contents.html.twig' with { entries: article.contents, open: true } only %}</div>
+            <div class="hide-desktop">{% include '@CitadelWikiPlugin/frontend/_contents.html.twig' with { entries: article.contents, open: false } only %}</div>
+        {% endif %}
+        {{ article.body|raw }}
+    </article>
+    {% include '@CitadelWikiPlugin/frontend/_members.html.twig' %}
+    {% if categories is not empty %}
+        <div class="flex items-center flex-wrap gap-2 mt-4">
+            <span class="text-small text-bold">{{ 'wiki.page.categories'|trans }}</span>
+            {% for category in categories %}
+                <a class="tag text-small" href="{{ path('wiki_page', { slug: wiki.slug, page: category.slug }) }}">{{ category.label }}</a>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="flex justify-between flex-wrap gap-4 mt-4 text-small text-secondary">
+        <div>
+            {% if page.currentRevision %}
+                {{ 'wiki.page.last_edited'|trans({ date: page.currentRevision.createdAt|format_date }) }}
+                {% if page.currentRevision.author %}
+                    {% include '@Forumify/components/username.html.twig' with { user: page.currentRevision.author } only %}
+                {% endif %}
+                &middot;
+            {% endif %}
+            <a href="{{ path('wiki_page_history', { slug: wiki.slug, page: slug }) }}">{{ 'wiki.page.revisions'|trans({ count: revisionCount }) }}</a>
+        </div>
+        {% if canModerate %}
+            <div class="flex gap-2">
+                <form method="post" action="{{ path('wiki_page_protect', { slug: wiki.slug, page: slug }) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('wiki-protect') }}">
+                    <button class="btn-link btn-small"><i class="ph ph-lock"></i>{{ (page.protected ? 'wiki.page.unprotect' : 'wiki.page.protect')|trans }}</button>
+                </form>
+                <form method="post" action="{{ path('wiki_page_delete', { slug: wiki.slug, page: slug }) }}" onsubmit="return confirm(this.dataset.confirm);" data-confirm="{{ 'wiki.page.delete_confirm'|trans }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('wiki-delete') }}">
+                    <button class="btn-link btn-small"><i class="ph ph-trash"></i>{{ 'wiki.page.delete'|trans }}</button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

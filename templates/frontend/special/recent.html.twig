@@ -1,0 +1,23 @@
+{% extends '@CitadelWikiPlugin/frontend/layout.html.twig' %}
+{% block title_page %}{{ 'wiki.nav.recent'|trans }} - {{ wiki.title }}{% endblock %}
+{% block wiki_content %}
+    <h1>{{ 'wiki.nav.recent'|trans }}</h1>
+    <div class="box">
+        {% for revision in pager.rows %}
+            <div class="flex items-baseline justify-between flex-wrap gap-2 pb-2 pt-2{% if not loop.last %} border-b{% endif %}">
+                <div>
+                    <a class="text-bold" href="{{ path('wiki_page', { slug: wiki.slug, page: revision.page.slug }) }}">{{ revision.page.title }}</a>
+                    <span class="{{ revision.sizeDelta >= 0 ? 'wiki-size-up' : 'wiki-size-down' }} text-small">{{ revision.sizeDelta >= 0 ? '+' }}{{ revision.sizeDelta }}</span>
+                    {% if revision.summary %}<span class="text-small text-secondary">{{ revision.summary }}</span>{% endif %}
+                </div>
+                <div class="text-small text-secondary">
+                    {% if revision.author %}{% include '@Forumify/components/username.html.twig' with { user: revision.author } only %}{% endif %}
+                    {{ revision.createdAt|format_date }}
+                </div>
+            </div>
+        {% else %}
+            <p class="text-secondary mb-0">{{ 'wiki.special.empty'|trans }}</p>
+        {% endfor %}
+    </div>
+    {% include '@CitadelWikiPlugin/frontend/_pager.html.twig' %}
+{% endblock %}

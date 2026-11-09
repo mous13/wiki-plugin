@@ -1,0 +1,12 @@
+admin:
+    resource: ../src/Admin/Controller
+    type: attribute
+    prefix: admin/wiki/
+    name_prefix: wiki_admin_
+
+frontend:
+    resource: ../src/Controller
+    type: attribute
+    prefix: wiki
+    name_prefix: wiki_
+    trailing_slash_on_root: false

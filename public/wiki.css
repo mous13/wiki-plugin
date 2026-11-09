@@ -1,0 +1,242 @@
+.wiki-main {
+    min-width: 0;
+}
+
+.wiki-article {
+    overflow-wrap: anywhere;
+}
+
+.wiki-article img {
+    max-width: 100%;
+    height: auto;
+}
+
+.wiki-article table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.wiki-article::after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+.wiki-infobox {
+    float: right;
+    width: 280px;
+    max-width: 100%;
+    margin: 0 0 var(--spacing-4) var(--spacing-4);
+}
+
+.wiki-infobox-fields {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--spacing-1) var(--spacing-4);
+    margin: 0;
+}
+
+.wiki-infobox-fields dd {
+    margin: 0;
+}
+
+.wiki-anchor {
+    margin-left: var(--spacing-2);
+    opacity: 0;
+}
+
+:is(h1, h2, h3, h4, h5, h6):hover > .wiki-anchor,
+.wiki-anchor:focus {
+    opacity: 0.6;
+}
+
+.wiki-link-missing {
+    padding: 0 var(--spacing-1);
+    border-radius: var(--border-radius);
+    background: var(--c-error);
+    color: var(--c-error-text);
+}
+
+.wiki-source {
+    height: 640px;
+    max-height: none;
+    font-family: monospace;
+    resize: vertical;
+}
+
+.wiki-preview {
+    max-height: 640px;
+    overflow-y: auto;
+}
+
+.wiki-diff-wrapper {
+    overflow-x: auto;
+    padding: 0;
+}
+
+.wiki-diff {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: monospace;
+}
+
+.wiki-diff-num {
+    width: 1%;
+    padding: 0 var(--spacing-2);
+    text-align: right;
+    user-select: none;
+}
+
+.wiki-diff-text {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.wiki-diff-added {
+    background: var(--c-success);
+    color: var(--c-success-text);
+}
+
+.wiki-diff-removed {
+    background: var(--c-error);
+    color: var(--c-error-text);
+}
+
+.wiki-size-up,
+.wiki-size-down {
+    padding: 0 var(--spacing-1);
+    border-radius: var(--border-radius);
+}
+
+.wiki-size-up {
+    background: var(--c-success);
+    color: var(--c-success-text);
+}
+
+.wiki-size-down {
+    background: var(--c-error);
+    color: var(--c-error-text);
+}
+
+.wiki-dialog {
+    width: min(34rem, calc(100vw - var(--spacing-8)));
+    padding: var(--spacing-6);
+    border: var(--border);
+    border-radius: var(--border-radius);
+    background: var(--c-elevation-1);
+    color: var(--c-text-primary);
+}
+
+.wiki-dialog::backdrop {
+    background: rgb(0 0 0 / 50%);
+}
+
+.wiki-contents > .wiki-summary,
+.wiki-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-2);
+    list-style: none;
+    cursor: pointer;
+}
+
+.wiki-summary::-webkit-details-marker {
+    display: none;
+}
+
+details[open] > .wiki-summary > .wiki-toggle-closed,
+details:not([open]) > .wiki-summary > .wiki-toggle-open {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .wiki-source {
+        height: 60vh;
+    }
+
+    .wiki-infobox {
+        float: none;
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+.wiki-infobox-slot .wiki-infobox {
+    float: none;
+    width: 100%;
+    margin: 0;
+}
+
+.wiki-sticky {
+    position: sticky;
+    top: var(--spacing-4);
+    max-height: calc(100vh - var(--spacing-8));
+    overflow-y: auto;
+}
+
+.wiki-accordion summary {
+    cursor: pointer;
+}
+
+.wiki-accordion details details {
+    margin-left: var(--spacing-3);
+}
+
+.wiki-accordion-pages {
+    list-style: none;
+    margin: 0;
+    padding-left: var(--spacing-3);
+}
+
+.wiki-contents {
+    width: fit-content;
+    min-width: 220px;
+    max-width: 100%;
+}
+
+.wiki-contents summary {
+    cursor: pointer;
+}
+
+.wiki-contents a {
+    break-inside: avoid;
+}
+
+.wiki-contents-columns {
+    width: min(36rem, 100%);
+}
+
+.wiki-contents-columns nav {
+    columns: 2;
+    column-gap: var(--spacing-6);
+}
+
+.wiki-infobox {
+    overflow: hidden;
+}
+
+.wiki-infobox .card-title {
+    font-weight: 700;
+    text-align: center;
+}
+
+.wiki-infobox img {
+    display: block;
+    width: 100%;
+    max-height: 240px;
+    object-fit: contain;
+    background: var(--c-elevation-0);
+}
+
+.wiki-infobox-fields {
+    gap: 0;
+    padding: 0;
+}
+
+.wiki-infobox-fields dt,
+.wiki-infobox-fields dd {
+    padding: var(--spacing-2) var(--spacing-4);
+    border-top: var(--border);
+}

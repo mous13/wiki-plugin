@@ -1,0 +1,15 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-4">
+    <h1 class="mb-0 flex items-center gap-2">
+        {% if page is not null and page.protected %}<i class="ph ph-lock" title="{{ 'wiki.page.protected_hint'|trans }}"></i>{% endif %}
+        {{ title }}
+    </h1>
+    <div class="flex items-center gap-1">
+        <a class="{{ active == 'read' ? 'btn-outlined' : 'btn-link' }}" href="{{ path('wiki_page', { slug: wiki.slug, page: slug }) }}"><i class="ph ph-book-open"></i>{{ 'wiki.tabs.read'|trans }}</a>
+        {% if canEdit %}
+            <a class="{{ active == 'edit' ? 'btn-outlined' : 'btn-link' }}" href="{{ path('wiki_page_edit', { slug: wiki.slug, page: slug }) }}"><i class="ph ph-pencil-simple-line"></i>{{ 'wiki.tabs.edit'|trans }}</a>
+        {% endif %}
+        {% if page is not null %}
+            <a class="{{ active == 'history' ? 'btn-outlined' : 'btn-link' }}" href="{{ path('wiki_page_history', { slug: wiki.slug, page: slug }) }}"><i class="ph ph-clock-counter-clockwise"></i>{{ 'wiki.tabs.history'|trans }}</a>
+        {% endif %}
+    </div>
+</div>

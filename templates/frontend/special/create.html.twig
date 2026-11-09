@@ -1,0 +1,16 @@
+{% extends '@CitadelWikiPlugin/frontend/layout.html.twig' %}
+{% block title_page %}{{ 'wiki.create.heading'|trans }} - {{ wiki.title }}{% endblock %}
+{% block wiki_content %}
+    <h1>{{ 'wiki.create.heading'|trans }}</h1>
+    {% if invalid %}
+        <div class="alert-error mb-2">{{ 'wiki.create.invalid'|trans }}</div>
+    {% endif %}
+    <form class="box" method="get" action="{{ path('wiki_special_create', { slug: wiki.slug }) }}">
+        <div class="form-row">
+            <label for="wiki-create-title">{{ 'wiki.create.title'|trans }}</label>
+            <input id="wiki-create-title" type="text" name="title" maxlength="255" required autofocus value="{{ title }}">
+            <p class="help-text">{{ 'wiki.create.help'|trans }}</p>
+        </div>
+        <button class="btn-primary"><i class="ph ph-arrow-right"></i>{{ 'wiki.create.submit'|trans }}</button>
+    </form>
+{% endblock %}

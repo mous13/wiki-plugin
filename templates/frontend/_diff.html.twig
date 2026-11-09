@@ -1,0 +1,19 @@
+<div class="box wiki-diff-wrapper">
+    <table class="wiki-diff">
+        <tbody>
+            {% for row in rows %}
+                {% if row.type == 'gap' %}
+                    <tr class="wiki-diff-gap"><td colspan="3" class="text-center text-secondary">&hellip;</td></tr>
+                {% else %}
+                    <tr class="wiki-diff-{{ row.type }}">
+                        <td class="wiki-diff-num text-secondary">{{ row.old }}</td>
+                        <td class="wiki-diff-num text-secondary">{{ row.new }}</td>
+                        <td class="wiki-diff-text"><span aria-hidden="true">{{ row.type == 'added' ? '+' : (row.type == 'removed' ? '-' : ' ') }}</span> {{ row.text }}</td>
+                    </tr>
+                {% endif %}
+            {% else %}
+                <tr><td class="text-secondary p-4">{{ 'wiki.diff.none'|trans }}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

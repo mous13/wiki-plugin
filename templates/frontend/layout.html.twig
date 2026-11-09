@@ -1,0 +1,21 @@
+{% extends '@Forumify/frontend/base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/citadelwikiplugin/wiki.css') }}?v={{ wiki_css_version() }}">
+{% endblock %}
+{% block body %}
+    {% set nav = wiki_nav(wiki, slug|default(null)) %}
+    <details class="box mb-4 hide-desktop">
+        <summary class="wiki-summary text-bold">{{ 'wiki.nav.browse'|trans }}{% include '@CitadelWikiPlugin/frontend/_toggle_icon.html.twig' %}</summary>
+        <div class="mt-2">{% include '@CitadelWikiPlugin/frontend/_nav.html.twig' %}</div>
+    </details>
+    <div class="grid gap-6">
+        <aside class="col-lg-2 hide-phone hide-tablet">
+            <div class="box wiki-sticky">{% include '@CitadelWikiPlugin/frontend/_nav.html.twig' %}</div>
+        </aside>
+        <div class="col-xs-12 {% block wiki_main_class %}col-lg-10{% endblock %} wiki-main">
+            {% block wiki_content %}{% endblock %}
+        </div>
+        {% block wiki_rail %}{% endblock %}
+    </div>
+{% endblock %}

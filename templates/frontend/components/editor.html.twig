@@ -1,0 +1,87 @@
+<div {{ attributes }}>
+    {{ form_start(form, { action: path('wiki_page_edit', { slug: wiki.slug, page: slug }), attr: { 'data-model': 'debounce(400)|*' } }) }}
+    <div {{ stimulus_controller('citadel/wiki-plugin/editor', { uploadUrl: path('forumify_core_media_upload') }) }}>
+        <div class="grid gap-4 mb-4">
+            <div class="col-xs-12 col-md-8">{{ form_row(form.title) }}</div>
+            <div class="col-xs-12 col-md-4">{{ form_row(form.parent) }}</div>
+        </div>
+        <div class="grid gap-4">
+            <div class="col-xs-12 col-lg-6">
+                <div class="flex items-center flex-wrap gap-1 mb-2" role="toolbar" aria-label="{{ 'wiki.edit.toolbar'|trans }}">
+                    {% for tool in [
+                        { icon: 'text-b', key: 'bold', before: '**', after: '**' },
+                        { icon: 'text-italic', key: 'italic', before: '*', after: '*' },
+                        { icon: 'text-h-two', key: 'heading', before: '\n## ', after: '' },
+                        { icon: 'link', key: 'wiki_link', before: '[[', after: ']]' },
+                    ] %}
+                        <button type="button" class="btn-link btn-icon btn-small" title="{{ ('wiki.edit.tool.' ~ tool.key)|trans }}" aria-label="{{ ('wiki.edit.tool.' ~ tool.key)|trans }}"
+                            data-action="citadel--wiki-plugin--editor#wrap"
+                            data-citadel--wiki-plugin--editor-before-param="{{ tool.before|replace({ '\\n': "\n" }) }}"
+                            data-citadel--wiki-plugin--editor-after-param="{{ tool.after }}"><i class="ph ph-{{ tool.icon }}"></i></button>
+                    {% endfor %}
+                    <button type="button" class="btn-link btn-icon btn-small" title="{{ 'wiki.edit.tool.infobox'|trans }}" aria-label="{{ 'wiki.edit.tool.infobox'|trans }}" data-action="citadel--wiki-plugin--editor#openInfobox"><i class="ph ph-identification-card"></i></button>
+                    <button type="button" class="btn-link btn-icon btn-small" title="{{ 'wiki.edit.tool.contents'|trans }}" aria-label="{{ 'wiki.edit.tool.contents'|trans }}" data-action="citadel--wiki-plugin--editor#insertContents"><i class="ph ph-list-numbers"></i></button>
+                    <button type="button" class="btn-link btn-icon btn-small" title="{{ 'wiki.edit.tool.image'|trans }}" aria-label="{{ 'wiki.edit.tool.image'|trans }}" data-action="citadel--wiki-plugin--editor#pickImage"><i class="ph ph-image"></i></button>
+                    <input type="file" accept="image/*" class="d-none" data-citadel--wiki-plugin--editor-target="file" data-action="change->citadel--wiki-plugin--editor#upload" data-live-ignore>
+                </div>
+                {{ form_errors(form.content) }}
+                {{ form_widget(form.content) }}
+            </div>
+            <div class="col-xs-12 col-lg-6">
+                <p class="text-small text-bold mb-2 mt-2">{{ 'wiki.edit.preview'|trans }}</p>
+                {% set preview = this.preview %}
+                {% if preview is null %}
+                    <div class="alert-warning">{{ 'wiki.edit.error.content_too_long'|trans({ max: this.maxContentBytes }) }}</div>
+                {% else %}
+                    {% if preview.missing is not empty %}
+                        <div class="alert-warning mb-2 text-small">{{ 'wiki.edit.missing_links'|trans({ links: preview.missing|join(', ') }) }}</div>
+                    {% endif %}
+                    {% if this.unknownTags is not empty %}
+                        <div class="alert-warning mb-2 text-small">{{ 'wiki.edit.unknown_tags'|trans({ tags: this.unknownTags|join(', ') }) }}</div>
+                    {% endif %}
+                    <div class="box rich-text wiki-article wiki-preview">{{ this.previewHtml|raw }}</div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="mt-4">{{ form_row(form.summary) }}</div>
+        <div class="flex items-center justify-between flex-wrap gap-4 mt-2">
+            <div>{{ form_row(form.minor) }}</div>
+            <div class="flex items-center gap-4">
+                <span class="text-small text-secondary">
+                    {% if baseRevisionId %}{{ 'wiki.edit.base'|trans({ id: baseRevisionId }) }}{% else %}{{ 'wiki.edit.new_page'|trans }}{% endif %}
+                </span>
+                <button class="btn-primary"><i class="ph ph-floppy-disk"></i>{{ 'wiki.edit.save'|trans }}</button>
+            </div>
+        </div>
+        <dialog class="wiki-dialog" aria-labelledby="wiki-infobox-heading" data-live-ignore data-citadel--wiki-plugin--editor-target="infoboxDialog" data-action="keydown.enter->citadel--wiki-plugin--editor#saveInfobox:prevent">
+            <h3 id="wiki-infobox-heading">{{ 'wiki.edit.infobox.heading'|trans }}</h3>
+            <div class="form-row">
+                <label for="wiki-infobox-title">{{ 'wiki.edit.infobox.title'|trans }}</label>
+                <input id="wiki-infobox-title" type="text" data-citadel--wiki-plugin--editor-target="infoboxTitle">
+            </div>
+            <div class="form-row">
+                <label for="wiki-infobox-image">{{ 'wiki.edit.infobox.image'|trans }}</label>
+                <div class="flex gap-2">
+                    <input id="wiki-infobox-image" class="flex-grow" type="text" placeholder="{{ 'wiki.edit.infobox.image_placeholder'|trans }}" data-citadel--wiki-plugin--editor-target="infoboxImage">
+                    <button type="button" class="btn-outlined" data-action="citadel--wiki-plugin--editor#pickInfoboxImage"><i class="ph ph-upload-simple"></i>{{ 'wiki.edit.infobox.upload'|trans }}</button>
+                </div>
+                <input type="file" accept="image/*" class="d-none" aria-hidden="true" tabindex="-1" data-citadel--wiki-plugin--editor-target="infoboxFile" data-action="change->citadel--wiki-plugin--editor#uploadInfoboxImage">
+            </div>
+            <p class="text-bold mb-2">{{ 'wiki.edit.infobox.rows'|trans }}</p>
+            <div class="flex flex-col gap-2 mb-2" data-citadel--wiki-plugin--editor-target="infoboxRows"></div>
+            <template data-citadel--wiki-plugin--editor-target="infoboxRow">
+                <div class="flex items-center gap-2" data-infobox-row>
+                    <input class="w-35" type="text" placeholder="{{ 'wiki.edit.infobox.label'|trans }}" aria-label="{{ 'wiki.edit.infobox.label'|trans }}">
+                    <input class="flex-grow" type="text" placeholder="{{ 'wiki.edit.infobox.value'|trans }}" aria-label="{{ 'wiki.edit.infobox.value'|trans }}">
+                    <button type="button" class="btn-link btn-icon" aria-label="{{ 'wiki.edit.infobox.remove'|trans }}" title="{{ 'wiki.edit.infobox.remove'|trans }}" data-action="citadel--wiki-plugin--editor#removeInfoboxRow"><i class="ph ph-x"></i></button>
+                </div>
+            </template>
+            <button type="button" class="btn-link btn-small" data-action="citadel--wiki-plugin--editor#addInfoboxRow"><i class="ph ph-plus"></i>{{ 'wiki.edit.infobox.add_row'|trans }}</button>
+            <div class="flex justify-end gap-2 mt-4">
+                <button type="button" class="btn-link" data-action="citadel--wiki-plugin--editor#closeInfobox">{{ 'wiki.edit.infobox.cancel'|trans }}</button>
+                <button type="button" class="btn-primary" data-action="citadel--wiki-plugin--editor#saveInfobox">{{ 'wiki.edit.infobox.save'|trans }}</button>
+            </div>
+        </dialog>
+    </div>
+    {{ form_end(form) }}
+</div>
