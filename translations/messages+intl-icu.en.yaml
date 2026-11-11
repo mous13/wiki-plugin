@@ -111,6 +111,9 @@ wiki:
     special:
         empty: 'Nothing here yet.'
         link_count: '{count, plural, one {# link} other {# links}}'
+    menu_builder:
+        wiki: 'Wiki'
+        select_wiki: 'Select a wiki'
     widget:
         embed_page_help: 'The name of the page to embed.'
     admin:

@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace PluginTests\Tests\Application;
 
 use Citadel\Wiki\Entity\Wiki;
+use Citadel\Wiki\MenuBuilder\MenuType\WikiMenuType;
 use Citadel\Wiki\Repository\WikiPageRepository;
 use Citadel\Wiki\Widget\EmbedPageWidget;
 use Citadel\Wiki\Widget\RecentChangesWidget;
 use Doctrine\ORM\EntityManagerInterface;
+use Forumify\Admin\Form\MenuItemType;
 use Forumify\Cms\Entity\Resource;
 use Forumify\Cms\Entity\Snippet;
+use Forumify\Core\Entity\MenuItem;
 use Forumify\Core\Entity\User;
 use Forumify\Testing\Traits\ACLTrait;
 use Forumify\Testing\Traits\UserTrait;
@@ -263,6 +266,45 @@ class WikiFlowTest extends WebTestCase
         self::assertResponseStatusCodeSame(422);
     }
 
+    public function testWikiMenuItemLinksToTheChosenWiki(): void
+    {
+        $this->allow('view', 'guest');
+        $item = $this->createWikiMenuItem(['wiki' => $this->wiki->getId()]);
+
+        $html = self::getContainer()->get(WikiMenuType::class)->buildItem($item);
+
+        self::assertStringContainsString("href='/wiki/omnicide'", $html);
+        self::assertStringContainsString('Game wiki', $html);
+    }
+
+    public function testWikiMenuItemWithoutAWikiIsHidden(): void
+    {
+        $this->allow('view', 'guest');
+        $item = $this->createWikiMenuItem([]);
+
+        self::assertSame('', self::getContainer()->get(WikiMenuType::class)->buildItem($item));
+    }
+
+    public function testWikiMenuItemIsHiddenWithoutWikiAccess(): void
+    {
+        $item = $this->createWikiMenuItem(['wiki' => $this->wiki->getId()]);
+
+        self::assertSame('', self::getContainer()->get(WikiMenuType::class)->buildItem($item));
+    }
+
+    public function testMenuBuilderOffersWikiTypeWithWikiChoice(): void
+    {
+        $item = new MenuItem();
+        $item->setName('Game wiki');
+        $item->setType('wiki');
+
+        $form = self::getContainer()->get('form.factory')->create(MenuItemType::class, $item);
+
+        self::assertContains('wiki', $form->get('type')->getConfig()->getOption('choices'));
+        self::assertSame(['Omnicide' => $this->wiki->getId()], $form->get('payload')->get('wiki')->getConfig()->getOption('choices'));
+        self::assertFalse($form->get('payload')->get('wiki')->getConfig()->getOption('multiple'));
+    }
+
     public function testOverlongSlugIsNotFound(): void
     {
         $this->loginEditor();
@@ -292,6 +334,23 @@ class WikiFlowTest extends WebTestCase
 
         $container->get('security.token_storage')->setToken(null);
         self::assertSame([], $recent->getTemplateContext($settings));
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function createWikiMenuItem(array $payload): MenuItem
+    {
+        $item = new MenuItem();
+        $item->setName('Game wiki');
+        $item->setType('wiki');
+        $item->setPayload($payload);
+        $em = self::getContainer()->get(EntityManagerInterface::class);
+        $em->persist($item);
+        $em->flush();
+        $this->createACL(MenuItem::class, $item->getId(), 'view', [$this->getGuestRole()]);
+
+        return $item;
     }
 
     private function loginEditor(): void
