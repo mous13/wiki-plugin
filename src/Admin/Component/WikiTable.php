@@ -57,7 +57,7 @@ class WikiTable extends AbstractDoctrineTable
         $url = htmlspecialchars($this->router->generate('forumify_admin_acl', (array)$wiki->getACLParameters()));
         $label = htmlspecialchars($this->translator->trans('wiki.admin.permissions'));
 
-        return "<a class='btn-link btn-icon btn-small' href='$url' title='$label'><i class='ph ph-shield-check'></i></a>"
+        return "<a class='btn-link btn-icon btn-small' href='$url' title='$label'><i class='ph ph-lock'></i></a>"
             . $this->renderAction('wiki_admin_wikis_edit', ['identifier' => $id], 'pencil-simple-line')
             . $this->renderAction('wiki_admin_wikis_delete', ['identifier' => $id], 'x');
     }
